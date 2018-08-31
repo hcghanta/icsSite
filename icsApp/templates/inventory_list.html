@@ -1,0 +1,182 @@
+{% load staticfiles %}
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<title>Inventory List</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	</head>
+	<style>
+		body {
+			background-color: beige;
+		}
+        h2 {
+            margin: 0;
+            display: inline-block;
+        }
+        .button {
+        float: right;
+        justify-content:flex-end;
+        align-items:center;
+        }
+        .rbutton {
+        background-color: #e6e6fa;
+        color: black;
+        display: inline-block;
+        padding: 5px;
+        text-align: center;
+        font-size: 14px;
+        border-radius: 20%;
+        }
+        .triangle-up {
+			width: 0;
+			height: 0;
+			border-left: 5px solid transparent;
+			border-right: 5px solid transparent;
+			border-bottom: 5px solid #555;
+		}
+		.triangle-down {
+			width: 0;
+			height: 0;
+			border-left: 5px solid transparent;
+			border-right: 5px solid transparent;
+			border-top: 5px solid #555;
+		}
+
+        /* Remove the navbar's default margin-bottom and rounded borders */
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {
+            height: 450px
+        }
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            padding-top: 20px;
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+        img.resize {
+            max-width:50%;
+            max-height:50%;
+        }
+        p {
+        	position: relative;
+			left: -10px;
+        }
+        h2.align {
+			text-align: center;
+			display: inline-block;
+		}
+        /* On small screens, set height to 'auto' for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+
+            .row.content {
+                height: auto;
+            }
+
+	</style>
+	<body>
+
+	<nav class="navbar navbar-inverse">
+
+            <a href="/inventory/">
+                <img src="{% static "images/BRB.gif" %}" width="200" height="60" alt="customer" align = "middle">
+		    </a>
+		<h2 style = "align:center; vertical-align:middle; padding-left:650px"><font color="silver">Welcome to Biomechanics Inventory Control System!</font></h2>
+
+	</nav>
+	<div class="container" style="padding-top: 50px">
+	<form class="search" action="{% url 'icsApp:search' %}" method='post'>
+	  {% csrf_token %}
+	  <input type="search" placeholder="Search item here..." name="usr_query"
+		  value='{{ query }}' required>
+	  <button type="submit">Search</button>
+	</form>
+    <div  class="row">
+        <h1 style="padding-left: 15px">Inventory Information</h1>
+        <a href="{% url 'icsApp:import_data' %}" onclick="return confirm('Make sure to import a csv file')">
+			<span class="btn btn-primary" style="float:right">Import</span></a>
+        <a href="{% url 'icsApp:export_data' %}" onclick="return confirm('Data will be exported to a csv file')">
+            <span class="btn btn-primary" style="float:right">Export</span></a>
+    </div>
+	<div>
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr class="bg-info">
+					<th style="white-space:nowrap;">
+						Item Name
+						<a href="{% url 'icsApp:ascending_item' %}" class='triangle-up'></a>
+						<a href="{% url 'icsApp:descending_item' %}" class='triangle-down'></a>
+					</th>
+					<th>Quantity</th>
+					<th>Location</th>
+					<th>Item Position</th>
+					<th style="white-space:nowrap;">
+						Category
+						<a href="{% url 'icsApp:ascending_category' %}" class='triangle-up'></a>
+						<a href="{% url 'icsApp:descending_category' %}" class='triangle-down'></a>
+					</th>
+					<th style="white-space:nowrap;">
+						Vendor
+						<a href="{% url 'icsApp:ascending_vendor' %}" class='triangle-up'></a>
+						<a href="{% url 'icsApp:descending_vendor' %}" class='triangle-down'></a>
+					</th>
+					<th>Vendor ID</th>
+					<th>Link</th>
+					<th>Unit-price</th>
+					<th>Updated Date</th>
+					<th>Total Value</th>
+					<th colspan="2">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for inventory in inventorys %}
+                <tr>
+					<td>{{ inventory.item_name }}</td>
+                    <td class="row">{{ inventory.quantity }}
+						<a href="{% url 'icsApp:quantity_increase' pk=inventory.pk %}"
+                           class="rbutton">+</a>
+						<a href="{% url 'icsApp:quantity_decrease' pk=inventory.pk %}"
+                           class="rbutton">-</a>
+					</td>
+                    <td>{{ inventory.location }}</td>
+                    <td>{{ inventory.item_position }}</td>
+                    <td>{{ inventory.category }}</td>
+                    <td>{{ inventory.vendor }}</td>
+					<td>{{ inventory.vendor_id }}</td>
+                    <td><a href={{ inventory.link }}>{{ inventory.link }}</a></td>
+					<td>{{ inventory.unit_price }}</td>
+					<td>{{ inventory.updated_date }}</td>
+					<td>{{ inventory.total_values }}</td>
+					<td><a href="{% url 'icsApp:inventory_edit' pk=inventory.pk %}"
+                           class="btn btn-warning">Edit</a></td>
+                    <td><a href="{% url 'icsApp:inventory_delete' pk=inventory.pk %}"
+                           onclick="return confirm('Are you sure you want to delete?')"
+                           class="btn btn-danger">Delete</a></td>
+                </tr>
+            {% endfor %}
+
+			</tbody>
+		</table>
+        <div>
+			<a href="{% url 'icsApp:inventory_new' %}" class="row"><span class="btn btn-primary">Add Item</span></a>
+     	</div>
+	</div>
+    </div>
+</body>
+</html>

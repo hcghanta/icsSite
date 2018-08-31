@@ -1,0 +1,3 @@
+QTY,item_name,vendor,vendor_id,link,unit_price
+20,Final,Amazon,112233,https://www.amazon.com/,78
+50,Final1,Netflix,223344,https://www.netflix.com/,50

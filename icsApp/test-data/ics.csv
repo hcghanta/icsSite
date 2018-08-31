@@ -1,0 +1,5 @@
+item_name,quantity,location,item_position,category,vendor,Vendor ID,link,unit_price,updated_date
+USB-CONN,45,BRB,BOX1-G1,Supplies,Makergeeks,,https://www.makergeeks.com/collections/pla-filament-2-85mm/products/raptor-series-pla-high-performan,40,8/23/2018
+10uF/50V CAP,60,BRB,BOX1-G2,Filament,Google,,https://www.google.com/,50,8/23/2018
+New,23,Home,BOX1-G3,Supplies,Makergeeks,,https://www.makergeeks.com/collections/pla-filament-2-85mm/products/raptor-series-pla-high-performan,100,8/26/2018
+Latest,15,Home,BOX1-G3,,,,,100,8/26/2018
